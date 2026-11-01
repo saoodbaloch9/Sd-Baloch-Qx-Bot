@@ -16,6 +16,17 @@ export const LiveCandleChart: React.FC<LiveCandleChartProps> = ({
   activeTrade,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const bgImageRef = useRef<HTMLImageElement | null>(null);
+
+  // Load background image once
+  useEffect(() => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = 'https://instasize.com/api/image/da7ac4d55a9ff2b0ccdf4b4c5762eba8dc2ec4a1e5ac90f79938b9152fcec09d.jpeg';
+    img.onload = () => {
+      bgImageRef.current = img;
+    };
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -33,9 +44,16 @@ export const LiveCandleChart: React.FC<LiveCandleChartProps> = ({
     const width = rect.width;
     const height = rect.height;
 
-    // Clear background with Quotex dark theme
-    ctx.fillStyle = '#08080a';
-    ctx.fillRect(0, 0, width, height);
+    // Draw Background Image or Fallback Dark Theme
+    if (bgImageRef.current) {
+      ctx.drawImage(bgImageRef.current, 0, 0, width, height);
+      // Dark overlay taake candles aur text bilkul saaf nazar aayein
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+      ctx.fillRect(0, 0, width, height);
+    } else {
+      ctx.fillStyle = '#08080a';
+      ctx.fillRect(0, 0, width, height);
+    }
 
     // Padding margins
     const paddingRight = 75; // For price scale
@@ -64,13 +82,13 @@ export const LiveCandleChart: React.FC<LiveCandleChartProps> = ({
     };
 
     // Draw grid lines
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
     ctx.lineWidth = 1;
 
     // Horizontal price grid lines
     const gridSteps = 5;
     ctx.font = '10px JetBrains Mono, monospace';
-    ctx.fillStyle = '#6b7280';
+    ctx.fillStyle = '#9ca3af';
     ctx.textAlign = 'left';
 
     for (let i = 0; i <= gridSteps; i++) {
@@ -96,7 +114,7 @@ export const LiveCandleChart: React.FC<LiveCandleChartProps> = ({
     const low20 = Math.min(...visibleCandles.map((c) => c.low));
 
     // Draw Resistance Line
-    ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
+    ctx.strokeStyle = 'rgba(239, 68, 68, 0.45)';
     ctx.setLineDash([4, 4]);
     ctx.beginPath();
     ctx.moveTo(0, getY(high20));
@@ -104,7 +122,7 @@ export const LiveCandleChart: React.FC<LiveCandleChartProps> = ({
     ctx.stroke();
 
     // Draw Support Line
-    ctx.strokeStyle = 'rgba(34, 197, 94, 0.35)';
+    ctx.strokeStyle = 'rgba(34, 197, 94, 0.45)';
     ctx.beginPath();
     ctx.moveTo(0, getY(low20));
     ctx.lineTo(chartWidth, getY(low20));
@@ -121,7 +139,7 @@ export const LiveCandleChart: React.FC<LiveCandleChartProps> = ({
     });
 
     if (ema9Coords.length > 1) {
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.7)';
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.85)';
       ctx.lineWidth = 1.8;
       ctx.beginPath();
       ctx.moveTo(ema9Coords[0].x, ema9Coords[0].y);
@@ -152,7 +170,7 @@ export const LiveCandleChart: React.FC<LiveCandleChartProps> = ({
       // Volume bar at bottom
       const maxVolHeight = 35;
       const volHeight = Math.min(maxVolHeight, (candle.volume / 1800) * maxVolHeight);
-      ctx.fillStyle = isBull ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+      ctx.fillStyle = isBull ? 'rgba(34, 197, 94, 0.25)' : 'rgba(239, 68, 68, 0.25)';
       ctx.fillRect(
         x - candleBodyWidth / 2,
         height - paddingBottom - volHeight,
