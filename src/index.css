@@ -207,3 +207,11 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #d4af37;
 }
+/* Trading chart ya candles wale area par image lagane ke liye */
+div[class*="chart"], div[class*="trading"], div[class*="candles"] {
+    background-image: url('https://instasize.com/api/image/da7ac4d55a9ff2b0ccdf4b4c5762eba8dc2ec4a1e5ac90f79938b9152fcec09d.jpeg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
