@@ -1,105 +1,10 @@
 <!doctype html>
-<html lang="en" class="dark">
-  <head>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SD BALOCH QX BOT</title>
-    
-    <!-- Firebase SDKs via CDN -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-          apiKey: "AIzaSyDIfFYyXAopbRCF0c2Xhyo8ei_oI6_HowQ",
-          authDomain: "sd-baloch-qx-bot-keys.firebaseapp.com",
-          projectId: "sd-baloch-qx-bot-keys",
-          storageBucket: "sd-baloch-qx-bot-keys.firebasestorage.app",
-          messagingSenderId: "778747168222",
-          appId: "1:778747168222:web:9839204a4910d0019a094f",
-          measurementId: "G-B6ZEFQK4G1"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let deviceId = localStorage.getItem("SD_DEVICE_ID");
-        if (!deviceId) {
-            deviceId = "DEV-" + Math.random().toString(36).substring(2, 10) + "-" + Date.now();
-            localStorage.setItem("SD_DEVICE_ID", deviceId);
-        }
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            let savedKey = localStorage.getItem("SD_ACTIVE_KEY");
-            if (savedKey) {
-                try {
-                    const docRef = doc(db, "bot_keys", savedKey);
-                    const docSnap = await getDoc(docRef);
-                    if (docSnap.exists() && docSnap.data().deviceId === deviceId) {
-                        document.getElementById("goldAuthModal").style.display = "none";
-                    } else {
-                        localStorage.removeItem("SD_ACTIVE_KEY");
-                        document.getElementById("goldAuthModal").style.display = "flex";
-                    }
-                } catch (e) {
-                    if (localStorage.getItem("SD_AUTH_LOCAL") === "true") {
-                        document.getElementById("goldAuthModal").style.display = "none";
-                    }
-                }
-            }
-        });
-
-        window.verifySDKey = async function() {
-            const inputKey = document.getElementById("sdPvtKey").value.trim();
-            const validKeys = ["SD-9999", "SD-8888", "SDBALOCH2026", "SD-BALOCH-01"];
-
-            if (!inputKey) {
-                alert("⚠️ Meharbani karke apni Private Key enter karein!");
-                return;
-            }
-
-            if (!validKeys.includes(inputKey)) {
-                alert("❌ Invalid Key! Sahi key enter karein ya WhatsApp se Nayi Key lein.");
-                return;
-            }
-
-            try {
-                const docRef = doc(db, "bot_keys", inputKey);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    let keyData = docSnap.data();
-                    if (keyData.deviceId === deviceId) {
-                        localStorage.setItem("SD_ACTIVE_KEY", inputKey);
-                        document.getElementById("goldAuthModal").style.display = "none";
-                    } else {
-                        alert("❌ ACCESS DENIED: Yeh Private Key pehle hi kisi aur mobile par activate ho chuki hai!");
-                    }
-                } else {
-                    await setDoc(docRef, {
-                        key: inputKey,
-                        deviceId: deviceId,
-                        activatedAt: new Date().toISOString()
-                    });
-
-                    localStorage.setItem("SD_ACTIVE_KEY", inputKey);
-                    localStorage.setItem("SD_AUTH_LOCAL", "true");
-                    document.getElementById("goldAuthModal").style.display = "none";
-                    alert("✅ Success! Key successfully activate ho gayi hai.");
-                }
-            } catch (error) {
-                // Automatic Fallback agar database me koi issue ho
-                localStorage.setItem("SD_ACTIVE_KEY", inputKey);
-                localStorage.setItem("SD_AUTH_LOCAL", "true");
-                document.getElementById("goldAuthModal").style.display = "none";
-                alert("✅ Success! Key verify ho gayi hai.");
-            }
-        }
-    </script>
 </head>
 <body style="background-color: #0b0b0b; color: #fff; margin: 0; font-family: sans-serif;">
 
@@ -135,6 +40,41 @@
     <!-- MAIN BOT CONTENT -->
     <div id="mainBotApp">
     </div>
+
+    <script>
+    window.addEventListener('DOMContentLoaded', () => {
+        let isAuth = localStorage.getItem("sd_bot_authorized");
+        if (isAuth === "true") {
+            document.getElementById("goldAuthModal").style.display = "none";
+        }
+    });
+
+    function verifySDKey() {
+        const inputKey = document.getElementById("sdPvtKey").value.trim();
+        const validKeys = ["SD-9999", "SD-8888", "SDBALOCH2026", "SD-BALOCH-01"];
+
+        if (!inputKey) {
+            alert("⚠️ Meharbani karke apni Private Key enter karein!");
+            return;
+        }
+
+        if (!validKeys.includes(inputKey)) {
+            alert("❌ Invalid Key! Sahi key enter karein ya WhatsApp se Nayi Key lein.");
+            return;
+        }
+
+        let keyStatus = localStorage.getItem("KEY_USED_" + inputKey);
+        if (keyStatus === "true") {
+            alert("❌ ACCESS DENIED: Yeh Private Key pehle hi use ho chuki hai!");
+            return;
+        }
+
+        localStorage.setItem("KEY_USED_" + inputKey, "true");
+        localStorage.setItem("sd_bot_authorized", "true");
+        document.getElementById("goldAuthModal").style.display = "none";
+        alert("✅ Success! Key successfully activate ho gayi hai.");
+    }
+    </script>
 
 </body>
 </html>
