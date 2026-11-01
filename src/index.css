@@ -206,11 +206,9 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #d4af37;
-}
-/* Candles aur Trading box ka background hata kar image set karna */
-div[class*="chart"], div[class*="trading"], div[class*="candles"], .bg-card, [class*="bg-"] {
-    background-color: transparent !important;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://instasize.com/api/image/da7ac4d55a9ff2b0ccdf4b4c5762eba8dc2ec4a1e5ac90f79938b9152fcec09d.jpeg') !important;
+}/* Baaki sabhi jagah se image hatane ke liye aur sirf candles chart par lagane ke liye */
+div[class*="chart-container"], .apexcharts-canvas, canvas, div[id*="chart"] {
+    background-image: url('https://instasize.com/api/image/da7ac4d55a9ff2b0ccdf4b4c5762eba8dc2ec4a1e5ac90f79938b9152fcec09d.jpeg') !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
