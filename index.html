@@ -1,51 +1,120 @@
 <!doctype html>
 <html lang="en" class="dark">
   <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SD BALOCH QX BOT</title>
+</head>
+<body style="background-color: #0b0b0b; color: #fff; margin: 0; font-family: sans-serif;">
+
+    <!-- 1. STYLISH 3D GOLDEN-BLACK OVERLAY MODAL -->
+    <div id="goldAuthModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:999999; display:flex; justify-content:center; align-items:center; padding:20px; box-sizing:border-box;">
+      <div style="background:linear-gradient(145deg, #181818, #0a0a0a); border:2px solid #d4af37; border-radius:20px; padding:30px 20px; width:100%; max-width:380px; text-align:center; box-shadow:0 0 30px rgba(212, 175, 55, 0.4);">
+        
+        <!-- Logo -->
+        <div style="width:65px; height:65px; background:linear-gradient(135deg, #d4af37, #8a5a00); border-radius:50%; margin:0 auto 15px; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:22px; color:#000; box-shadow:0 0 15px #d4af37;">SD</div>
+        
+        <h2 style="color:#d4af37; font-size:20px; letter-spacing:1px; margin-bottom:8px; text-transform:uppercase;">SD BALOCH QX BOT</h2>
+        <p style="color:#aaa; font-size:13px; margin-bottom:20px;">Secure Private Key Activation Terminal</p>
+
+        <!-- Input Box -->
+        <input type="text" id="sdPvtKey" placeholder="Enter Your Private Key" style="width:100%; padding:12px; background:#111; border:1px solid #d4af37; border-radius:10px; color:#fff; text-align:center; font-size:15px; outline:none; box-sizing:border-box; margin-bottom:15px;">
+        
+        <!-- Submit Button -->
+        <button onclick="verifySDKey()" style="width:100%; padding:12px; background:linear-gradient(135deg, #d4af37, #aa771c); border:none; border-radius:10px; color:#000; font-weight:bold; font-size:15px; cursor:pointer; text-transform:uppercase; box-shadow:0 0 10px rgba(212,175,55,0.5);">UNLOCK BOT</button>
+
+        <!-- WhatsApp Help Section -->
+        <div style="margin-top:25px; padding-top:15px; border-top:1px solid #222;">
+          <p style="color:#fff; font-size:13px; margin-bottom:4px;">Need Activation Key?</p>
+          <p style="color:#d4af37; font-size:13px; margin-bottom:12px;">پرائیویٹ کی حاصل کرنے کے لیے ہم سے رابطہ کریں</p>
+          
+          <a href="https://wa.me/923316813901?text=Hello%20SD%20Baloch,%20mujhe%20SD%20BALOCH%20QX%20BOT%20ki%20Private%20Key%20chahiye" target="_blank" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; background:#25D366; color:#fff; text-decoration:none; padding:10px 18px; border-radius:25px; font-weight:bold; font-size:13px; box-shadow:0 0 12px rgba(37,211,102,0.4);">
+            💬 Contact Admin on WhatsApp
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. MAIN BOT CONTENT -->
+    <div id="mainBotApp">
+        <!-- Aapka terminal UI yahan hoga -->
+    </div>
+
+    <!-- 3. STRICT LOCKING & AUTHENTICATION SCRIPT -->
     <script>
-// Page load par check karein ke kya yeh mobile pehle se unlocked hai
-window.addEventListener('DOMContentLoaded', () => {
-    let isUnlocked = localStorage.getItem("sd_bot_unlocked_device");
-    if (isUnlocked === "true") {
-        document.getElementById("goldAuthModal").style.display = "none";
-    }
-});
+    // System Initialization
+    (function initAuthSystem() {
+        // Generate Unique Device ID if not exists
+        let currentDeviceId = localStorage.getItem("SD_MY_DEVICE_ID");
+        if (!currentDeviceId) {
+            currentDeviceId = "DEV-" + Math.random().toString(36).substring(2, 10) + "-" + Date.now();
+            localStorage.setItem("SD_MY_DEVICE_ID", currentDeviceId);
+        }
 
-function checkSDKey() {
-    const userKey = document.getElementById("sdPvtKey").value.trim();
-    
-    // Aap ki valid keys ki list
-    const validKeys = ["SD-9999", "SD-8888", "SDBALOCH2026", "SD-BALOCH-01"];
-    
-    if (!userKey) {
-        alert("⚠️ Meharbani karke apni Private Key enter karein!");
-        return;
-    }
+        // Check Access Status on Page Load
+        let activeKey = localStorage.getItem("SD_ACTIVE_KEY");
+        let modal = document.getElementById("goldAuthModal");
 
-    if (validKeys.includes(userKey)) {
+        if (activeKey) {
+            let keyBindInfo = localStorage.getItem("SD_BIND_" + activeKey);
+            if (keyBindInfo === currentDeviceId) {
+                // Device Authorized
+                modal.style.display = "none";
+            } else {
+                // Key copied from elsewhere or invalid
+                localStorage.removeItem("SD_ACTIVE_KEY");
+                modal.style.display = "flex";
+            }
+        } else {
+            modal.style.display = "flex";
+        }
+    })();
+
+    function verifySDKey() {
+        const inputKey = document.getElementById("sdPvtKey").value.trim();
         
-        // Check karein ke kya yeh key pehle se use ho kar expire ho chuki hai?
-        let usedKeysList = JSON.parse(localStorage.getItem("SD_GLOBAL_EXPIRED_KEYS") || "[]");
+        // Aapki VIP Private Keys ki list
+        const adminKeys = ["SD-9999", "SD-8888", "SDBALOCH2026", "SD-BALOCH-01", "SD-KEY-101"];
         
-        if (usedKeysList.includes(userKey)) {
-            alert("❌ Error: Yeh Private Key pehle hi use ho kar expire ho chuki hai! Doosre mobile par nahi chal sakti.");
+        if (!inputKey) {
+            alert("⚠️ Meharbani karke apni Private Key enter karein!");
             return;
         }
 
-        // Key ko use mein la kar foran expired/locked list mein daal dein
-        usedKeysList.push(userKey);
-        localStorage.setItem("SD_GLOBAL_EXPIRED_KEYS", JSON.stringify(usedKeysList));
-        
-        // Is mobile ko authorized kar do
-        localStorage.setItem("sd_bot_unlocked_device", "true");
-        document.getElementById("goldAuthModal").style.display = "none";
-        
-        alert("✅ Success! Key successfully activate ho gai hai aur ab yeh expire ho chuki hai.");
-        
-    } else {
-        alert("❌ Invalid Key! Sahi key enter karein ya WhatsApp par rabta karke nayi key lein.");
+        if (!adminKeys.includes(inputKey)) {
+            alert("❌ Invalid Private Key! Re-check karein ya WhatsApp par Admin se Nayi Key lein.");
+            return;
+        }
+
+        let myDeviceId = localStorage.getItem("SD_MY_DEVICE_ID");
+        let existingLock = localStorage.getItem("SD_BIND_" + inputKey);
+
+        if (!existingLock) {
+            // First time activation: Key is permanently locked to THIS device
+            localStorage.setItem("SD_BIND_" + inputKey, myDeviceId);
+            localStorage.setItem("SD_ACTIVE_KEY", inputKey);
+            document.getElementById("goldAuthModal").style.display = "none";
+            alert("✅ Access Granted! Key aapke device ke sath permanently bind ho gai hai.");
+        } 
+        else if (existingLock === myDeviceId) {
+            // Same device unlocking again
+            localStorage.setItem("SD_ACTIVE_KEY", inputKey);
+            document.getElementById("goldAuthModal").style.display = "none";
+        } 
+        else {
+            // Access Denied: Key bound to another device
+            alert("❌ ACCESS DENIED! Yeh Key pehle hi kisi aur mobile par activate ho chuki hai. Aap doosre mobile par yeh key use nahi kar sakte.");
+        }
     }
-}
-</script>
+    </script>
+
+</body>
+</html>
+
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
