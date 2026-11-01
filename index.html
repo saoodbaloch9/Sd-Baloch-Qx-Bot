@@ -1,6 +1,97 @@
 <!doctype html>
 <html lang="en" class="dark">
   <head>
+    <!-- Google API / Auth Script -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<!-- Security & Key System Modal -->
+<div id="authModal" class="modal-overlay">
+  <div class="modal-content 3d-gold-card">
+    <h2 class="gold-text">SD BALOCH QX BOT ACCESS</h2>
+    <p>Pehle apne Google Account se Sign-In karein:</p>
+    
+    <!-- Step A: Google Login Button -->
+    <div id="g_id_onload"
+         data-client_id="YOUR_GOOGLE_CLIENT_ID"
+         data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+
+    <!-- Step B: Private Key Input (Sign-In ke baad dikhega) -->
+    <div id="keySection" style="display:none; margin-top:15px;">
+      <p>Apni Private Access Key enter karein:</p>
+      <input type="text" id="userPrivateKey" placeholder="SD-XXXX-XXXX" class="gold-input" />
+      <button onclick="verifyPrivateKey()" class="gold-btn">UNLOCK BOT</button>
+      
+      <!-- WhatsApp Help Section -->
+      <div style="margin-top:20px; font-size:13px;">
+        <p style="color:#aaa;">Private Key lene ke liye humse rabta karein:</p>
+        <a href="https://wa.me/923316813901?text=Hello%20SD%20Baloch,%20mujhe%20bot%20ki%20Private%20Key%20chahiye" 
+           target="_blank" class="whatsapp-link-btn">
+           💬 WhatsApp Par Key Lene Ke Liye Click Karein
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Valid Keys Database (Aap code mein ya Google Sheets mein keys set kar sakte hain)
+const ALLOWED_KEYS = {
+  "SD-KEY-101": { lockedEmail: null, lockedDevice: null },
+  "SD-KEY-102": { lockedEmail: null, lockedDevice: null },
+  "SD-KEY-103": { lockedEmail: null, lockedDevice: null }
+};
+
+let currentGoogleEmail = "";
+
+function handleCredentialResponse(response) {
+  // Google Auth success
+  const responsePayload = decodeJwtResponse(response.credential);
+  currentGoogleEmail = responsePayload.email;
+  
+  // Show Key Input
+  document.querySelector('.g_id_signin').style.display = 'none';
+  document.getElementById('keySection').style.display = 'block';
+}
+
+function verifyPrivateKey() {
+  const inputKey = document.getElementById('userPrivateKey').value.trim();
+  const deviceFingerprint = navigator.userAgent + screen.width;
+
+  if (ALLOWED_KEYS[inputKey]) {
+    let keyData = ALLOWED_KEYS[inputKey];
+    
+    // Pehli baar lock karne ka logic
+    let savedLock = localStorage.getItem("LOCKED_" + inputKey);
+    if (!savedLock) {
+      localStorage.setItem("LOCKED_" + inputKey, JSON.stringify({ email: currentGoogleEmail, device: deviceFingerprint }));
+      alert("Key successfully locked to your Gmail & Device!");
+      unlockBotTerminal();
+    } else {
+      let lockInfo = JSON.parse(savedLock);
+      if (lockInfo.email === currentGoogleEmail) {
+        unlockBotTerminal();
+      } else {
+        alert("Yeh Key kisi aur Gmail Account/Device par registered hai!");
+      }
+    }
+  } else {
+    alert("Invalid Private Key! WhatsApp par rabta karke nayi key lein.");
+  }
+}
+
+function unlockBotTerminal() {
+  document.getElementById('authModal').style.display = 'none';
+}
+
+function decodeJwtResponse(token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  return JSON.parse(window.atob(base64));
+}
+</script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SD BALOCH QX BOT - Quotex Pro Trading Signal Engine</title>
