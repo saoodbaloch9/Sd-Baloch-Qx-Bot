@@ -10,7 +10,7 @@
 </head>
 <body style="background-color: #0b0b0b; color: #fff; margin: 0; font-family: sans-serif;">
 
-    <!-- 1. STYLISH 3D GOLDEN-BLACK OVERLAY MODAL -->
+    <!-- STYLISH 3D GOLDEN-BLACK OVERLAY MODAL -->
     <div id="goldAuthModal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:999999; display:flex; justify-content:center; align-items:center; padding:20px; box-sizing:border-box;">
       <div style="background:linear-gradient(145deg, #181818, #0a0a0a); border:2px solid #d4af37; border-radius:20px; padding:30px 20px; width:100%; max-width:380px; text-align:center; box-shadow:0 0 30px rgba(212, 175, 55, 0.4);">
         
@@ -39,78 +39,59 @@
       </div>
     </div>
 
-    <!-- 2. MAIN BOT CONTENT -->
+    <!-- MAIN BOT CONTENT -->
     <div id="mainBotApp">
         <!-- Aapka terminal UI yahan hoga -->
     </div>
 
-    <!-- 3. STRICT LOCKING & AUTHENTICATION SCRIPT -->
+    <!-- STRICT SECURITY LOGIC -->
     <script>
-    // System Initialization
-    (function initAuthSystem() {
-        // Generate Unique Device ID if not exists
-        let currentDeviceId = localStorage.getItem("SD_MY_DEVICE_ID");
-        if (!currentDeviceId) {
-            currentDeviceId = "DEV-" + Math.random().toString(36).substring(2, 10) + "-" + Date.now();
-            localStorage.setItem("SD_MY_DEVICE_ID", currentDeviceId);
-        }
-
-        // Check Access Status on Page Load
-        let activeKey = localStorage.getItem("SD_ACTIVE_KEY");
+    // Page load hote hi check karein ke kya yeh mobile pehle se authorized hai
+    window.addEventListener('DOMContentLoaded', () => {
+        let isAuthorized = localStorage.getItem("sd_bot_authorized_device");
         let modal = document.getElementById("goldAuthModal");
-
-        if (activeKey) {
-            let keyBindInfo = localStorage.getItem("SD_BIND_" + activeKey);
-            if (keyBindInfo === currentDeviceId) {
-                // Device Authorized
-                modal.style.display = "none";
-            } else {
-                // Key copied from elsewhere or invalid
-                localStorage.removeItem("SD_ACTIVE_KEY");
-                modal.style.display = "flex";
-            }
+        
+        if (isAuthorized === "true") {
+            modal.style.display = "none";
         } else {
             modal.style.display = "flex";
         }
-    })();
+    });
 
     function verifySDKey() {
         const inputKey = document.getElementById("sdPvtKey").value.trim();
-        
-        // Aapki VIP Private Keys ki list
-        const adminKeys = ["SD-9999", "SD-8888", "SDBALOCH2026", "SD-BALOCH-01", "SD-KEY-101"];
         
         if (!inputKey) {
             alert("⚠️ Meharbani karke apni Private Key enter karein!");
             return;
         }
 
-        if (!adminKeys.includes(inputKey)) {
-            alert("❌ Invalid Private Key! Re-check karein ya WhatsApp par Admin se Nayi Key lein.");
+        // Check karein ke kya yeh key pehle se is browser mein use ho chuki hai
+        let usedStatus = localStorage.getItem("KEY_USED_" + inputKey);
+        
+        if (usedStatus === "true") {
+            alert("❌ ACCESS DENIED: Yeh Private Key pehle hi use ho chuki hai aur ab expire ho chuki hai!");
             return;
         }
 
-        let myDeviceId = localStorage.getItem("SD_MY_DEVICE_ID");
-        let existingLock = localStorage.getItem("SD_BIND_" + inputKey);
+        // Valid keys ki list (Aap yahan apni marzi ki keys rakh sakte hain)
+        const validKeys = ["SD-9999", "SD-8888", "SDBALOCH2026", "SD-BALOCH-01"];
 
-        if (!existingLock) {
-            // First time activation: Key is permanently locked to THIS device
-            localStorage.setItem("SD_BIND_" + inputKey, myDeviceId);
-            localStorage.setItem("SD_ACTIVE_KEY", inputKey);
+        if (validKeys.includes(inputKey)) {
+            // Key ko is device ke liye lock aur use mark kar do
+            localStorage.setItem("KEY_USED_" + inputKey, "true");
+            localStorage.setItem("sd_bot_authorized_device", "true");
+            
             document.getElementById("goldAuthModal").style.display = "none";
-            alert("✅ Access Granted! Key aapke device ke sath permanently bind ho gai hai.");
-        } 
-        else if (existingLock === myDeviceId) {
-            // Same device unlocking again
-            localStorage.setItem("SD_ACTIVE_KEY", inputKey);
-            document.getElementById("goldAuthModal").style.display = "none";
-        } 
-        else {
-            // Access Denied: Key bound to another device
-            alert("❌ ACCESS DENIED! Yeh Key pehle hi kisi aur mobile par activate ho chuki hai. Aap doosre mobile par yeh key use nahi kar sakte.");
+            alert("✅ Success! Key verify ho gayi hai aur ab active hai.");
+        } else {
+            alert("❌ Invalid Private Key! WhatsApp par rabta karke nayi key lein.");
         }
     }
     </script>
+
+</body>
+</html>
 
 </body>
 </html>
