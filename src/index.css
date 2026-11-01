@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --gold-primary: #d4af37;
+    --gold-light: #fbeea4;
+    --gold-dark: #8c6d1f;
+    --gold-metallic: linear-gradient(135deg, #e5c05d 0%, #fff6cb 25%, #d4af37 50%, #f6df8d 75%, #a67c1e 100%);
+    --bg-dark: #070707;
+    --bg-card: #0f0f10;
+  }
+
+  body {
+    background-color: #080808;
+    background-image: 
+      radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 60%),
+      radial-gradient(circle at 10% 40%, rgba(184, 134, 11, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 90% 70%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    color: #e5e5e5;
+  }
+}
+
+/* Custom 3D & Luxury Classes */
+.font-luxury {
+  font-family: 'Cinzel', serif;
+}
+
+.font-mono-numbers {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* 3D Gold Gradient Text */
+.gold-text-gradient {
+  background: linear-gradient(135deg, #ffd700 0%, #fff2a8 30%, #d4af37 60%, #b8860b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-text-glow {
+  text-shadow: 0 0 16px rgba(212, 175, 55, 0.5), 0 0 35px rgba(212, 175, 55, 0.25);
+}
+
+.green-text-glow {
+  text-shadow: 0 0 16px rgba(34, 197, 94, 0.6), 0 0 30px rgba(34, 197, 94, 0.3);
+}
+
+.red-text-glow {
+  text-shadow: 0 0 16px rgba(239, 68, 68, 0.6), 0 0 30px rgba(239, 68, 68, 0.3);
+}
+
+/* 3D Metallic Card Container */
+.card-3d-gold {
+  background: linear-gradient(180deg, rgba(24, 23, 20, 0.85) 0%, rgba(12, 12, 13, 0.95) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 
+    0 10px 30px -5px rgba(0, 0, 0, 0.9),
+    0 0 0 1px rgba(212, 175, 55, 0.15),
+    inset 0 1px 0 0 rgba(255, 235, 150, 0.3),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(16px);
+}
+
+.card-3d-gold-interactive {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-3d-gold-interactive:hover {
+  border-color: rgba(212, 175, 55, 0.65);
+  box-shadow: 
+    0 16px 40px -5px rgba(0, 0, 0, 0.95),
+    0 0 20px rgba(212, 175, 55, 0.2),
+    inset 0 1px 1px 0 rgba(255, 240, 180, 0.45);
+  transform: translateY(-2px);
+}
+
+/* 3D Pushable Button Styling */
+.btn-3d-gold {
+  background: linear-gradient(180deg, #ffe066 0%, #d4af37 50%, #997300 100%);
+  border: 1px solid #ffeaa7;
+  color: #121008;
+  font-weight: 800;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 6px 0 #6b5103,
+    0 10px 20px rgba(0, 0, 0, 0.7),
+    0 0 25px rgba(212, 175, 55, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transform: translateY(0);
+  transition: all 0.15s ease-out;
+}
+.btn-3d-gold:hover {
+  background: linear-gradient(180deg, #fff085 0%, #dfb83b 50%, #ad8200 100%);
+  box-shadow: 
+    0 6px 0 #6b5103,
+    0 12px 26px rgba(212, 175, 55, 0.45),
+    0 0 35px rgba(212, 175, 55, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.btn-3d-gold:active {
+  transform: translateY(4px);
+  box-shadow: 
+    0 2px 0 #6b5103,
+    0 4px 10px rgba(0, 0, 0, 0.7),
+    inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* 3D Call / Put Action Buttons */
+.btn-3d-call {
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 60%, #14532d 100%);
+  border: 1px solid #86efac;
+  box-shadow: 
+    0 6px 0 #0f3f22,
+    0 12px 25px rgba(22, 163, 74, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.btn-3d-call:hover {
+  filter: brightness(1.1);
+  box-shadow: 
+    0 6px 0 #0f3f22,
+    0 14px 30px rgba(34, 197, 94, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.btn-3d-put {
+  background: linear-gradient(180deg, #f87171 0%, #dc2626 60%, #7f1d1d 100%);
+  border: 1px solid #fca5a5;
+  box-shadow: 
+    0 6px 0 #521313,
+    0 12px 25px rgba(220, 38, 38, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.btn-3d-put:hover {
+  filter: brightness(1.1);
+  box-shadow: 
+    0 6px 0 #521313,
+    0 14px 30px rgba(239, 68, 68, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* 3D Timeframe Pill Button */
+.btn-3d-pill {
+  background: linear-gradient(180deg, #1b1a18 0%, #0d0c0b 100%);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  box-shadow: 
+    0 3px 0 #070707,
+    0 6px 12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+.btn-3d-pill.active {
+  background: linear-gradient(180deg, #d4af37 0%, #a27a14 100%);
+  border-color: #ffe685;
+  color: #0b0a06;
+  font-weight: 800;
+  box-shadow: 
+    0 2px 0 #503d09,
+    0 0 16px rgba(212, 175, 55, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transform: translateY(1px);
+}
+
+/* Pulsing radar animation */
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.radar-spinner {
+  animation: radar-sweep 2.5s linear infinite;
+}
+
+@keyframes gold-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.gold-shimmer-badge {
+  background: linear-gradient(90deg, rgba(212,175,55,0.1) 0%, rgba(255,235,140,0.4) 50%, rgba(212,175,55,0.1) 100%);
+  background-size: 200% 100%;
+  animation: gold-shimmer 3s infinite linear;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+::-webkit-scrollbar-thumb {
+  background: #332b13;
+  border-radius: 3px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "SD BALOCH QX BOT",
+  "description": "Ultra-modern 3D Quotex platform signal bot powered by a 25+ multi-method analysis engine with live countdown and strict win/loss result verification.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
