@@ -28,14 +28,6 @@
 .font-luxury {
   font-family: 'Cinzel', serif;
 }
-/* Trading candles ya chart wale box ke liye background image */
-.chart-container, .trading-view, .card {
-    background-image: url('https://instasize.com/api/image/da7ac4d55a9ff2b0ccdf4b4c5762eba8dc2ec4a1e5ac90f79938b9152fcec09d.jpeg') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-}
-
 
 .font-mono-numbers {
   font-family: 'JetBrains Mono', monospace;
@@ -206,10 +198,4 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #d4af37;
-}/* Baaki sabhi jagah se image hatane ke liye aur sirf candles chart par lagane ke liye */
-div[class*="chart-container"], .apexcharts-canvas, canvas, div[id*="chart"] {
-    background-image: url('https://instasize.com/api/image/da7ac4d55a9ff2b0ccdf4b4c5762eba8dc2ec4a1e5ac90f79938b9152fcec09d.jpeg') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
 }
