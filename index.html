@@ -1,12 +1,103 @@
 <!doctype html>
 <html lang="en" class="dark">
   <head>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SD BALOCH QX BOT</title>
+    
+    <!-- Firebase SDKs via CDN -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Your Firebase Configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDIfFYyXAopbRCF0c2Xhyo8ei_oI6_HowQ",
+          authDomain: "sd-baloch-qx-bot-keys.firebaseapp.com",
+          projectId: "sd-baloch-qx-bot-keys",
+          storageBucket: "sd-baloch-qx-bot-keys.firebasestorage.app",
+          messagingSenderId: "778747168222",
+          appId: "1:778747168222:web:9839204a4910d0019a094f",
+          measurementId: "G-B6ZEFQK4G1"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Unique Device ID generate karna
+        let deviceId = localStorage.getItem("SD_DEVICE_ID");
+        if (!deviceId) {
+            deviceId = "DEV-" + Math.random().toString(36).substring(2, 10) + "-" + Date.now();
+            localStorage.setItem("SD_DEVICE_ID", deviceId);
+        }
+
+        // Check on Page Load if already authorized
+        window.addEventListener('DOMContentLoaded', async () => {
+            let savedKey = localStorage.getItem("SD_ACTIVE_KEY");
+            if (savedKey) {
+                const docRef = doc(db, "bot_keys", savedKey);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists() && docSnap.data().deviceId === deviceId) {
+                    document.getElementById("goldAuthModal").style.display = "none";
+                } else {
+                    localStorage.removeItem("SD_ACTIVE_KEY");
+                    document.getElementById("goldAuthModal").style.display = "flex";
+                }
+            }
+        });
+
+        // Global function for key verification
+        window.verifySDKey = async function() {
+            const inputKey = document.getElementById("sdPvtKey").value.trim();
+            const validKeys = ["SD-9999", "SD-8888", "SDBALOCH2026", "SD-BALOCH-01"];
+
+            if (!inputKey) {
+                alert("⚠️ Meharbani karke apni Private Key enter karein!");
+                return;
+            }
+
+            if (!validKeys.includes(inputKey)) {
+                alert("❌ Invalid Key! Sahi key enter karein ya WhatsApp se Nayi Key lein.");
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "bot_keys", inputKey);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    let keyData = docSnap.data();
+                    if (keyData.deviceId === deviceId) {
+                        // Same device reconnecting
+                        localStorage.setItem("SD_ACTIVE_KEY", inputKey);
+                        document.getElementById("goldAuthModal").style.display = "none";
+                    } else {
+                        // Already used on another device!
+                        alert("❌ ACCESS DENIED: Yeh Private Key pehle hi kisi aur mobile par activate ho chuki hai!");
+                    }
+                } else {
+                    // First time key usage - Lock to this device online!
+                    await setDoc(docRef, {
+                        key: inputKey,
+                        deviceId: deviceId,
+                        activatedAt: new Date().toISOString()
+                    });
+
+                    localStorage.setItem("SD_ACTIVE_KEY", inputKey);
+                    document.getElementById("goldAuthModal").style.display = "none";
+                    alert("✅ Success! Key successfully aapke device ke sath online lock ho gayi hai.");
+                }
+            } catch (error) {
+                alert("⚠️ Connection Error: Internet check karein aur dobara koshish karein.");
+                console.error(error);
+            }
+        }
+    </script>
 </head>
 <body style="background-color: #0b0b0b; color: #fff; margin: 0; font-family: sans-serif;">
 
@@ -44,58 +135,8 @@
         <!-- Aapka terminal UI yahan hoga -->
     </div>
 
-    <!-- STRICT SECURITY LOGIC -->
-    <script>
-    // Page load hote hi check karein ke kya yeh mobile pehle se authorized hai
-    window.addEventListener('DOMContentLoaded', () => {
-        let isAuthorized = localStorage.getItem("sd_bot_authorized_device");
-        let modal = document.getElementById("goldAuthModal");
-        
-        if (isAuthorized === "true") {
-            modal.style.display = "none";
-        } else {
-            modal.style.display = "flex";
-        }
-    });
-
-    function verifySDKey() {
-        const inputKey = document.getElementById("sdPvtKey").value.trim();
-        
-        if (!inputKey) {
-            alert("⚠️ Meharbani karke apni Private Key enter karein!");
-            return;
-        }
-
-        // Check karein ke kya yeh key pehle se is browser mein use ho chuki hai
-        let usedStatus = localStorage.getItem("KEY_USED_" + inputKey);
-        
-        if (usedStatus === "true") {
-            alert("❌ ACCESS DENIED: Yeh Private Key pehle hi use ho chuki hai aur ab expire ho chuki hai!");
-            return;
-        }
-
-        // Valid keys ki list (Aap yahan apni marzi ki keys rakh sakte hain)
-        const validKeys = ["SD-9999", "SD-8888", "SDBALOCH2026", "SD-BALOCH-01"];
-
-        if (validKeys.includes(inputKey)) {
-            // Key ko is device ke liye lock aur use mark kar do
-            localStorage.setItem("KEY_USED_" + inputKey, "true");
-            localStorage.setItem("sd_bot_authorized_device", "true");
-            
-            document.getElementById("goldAuthModal").style.display = "none";
-            alert("✅ Success! Key verify ho gayi hai aur ab active hai.");
-        } else {
-            alert("❌ Invalid Private Key! WhatsApp par rabta karke nayi key lein.");
-        }
-    }
-    </script>
-
 </body>
 </html>
-
-</body>
-</html>
-
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
